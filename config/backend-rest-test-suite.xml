@@ -1,0 +1,9 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="BO-API-Default-TestSuite" verbose="1">
+	<test name="Java Tests" enabled="true">
+		<parameter name="step.provider.pkg" value="com.drivewealth.test.rest" />
+		<classes>
+ 			<class name="com.drivewealth.test.rest.RestAssuredTest"></class>
+		</classes>
+	</test>
+</suite>

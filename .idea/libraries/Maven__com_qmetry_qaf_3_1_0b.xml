@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.qmetry:qaf:3.1.0b">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/qmetry/qaf/3.1.0b/qaf-3.1.0b.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/qmetry/qaf/3.1.0b/qaf-3.1.0b-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/qmetry/qaf/3.1.0b/qaf-3.1.0b-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,9 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="BO-API-Selenium-TestSuite" verbose="1">
+	<test name="Selenium Tests" enabled="true">
+		<parameter name="step.provider.pkg" value="com.drivewealth.test.ui" />
+		<classes>
+				<class name="com.drivewealth.test.ui.SeleniumTest"></class>
+        </classes>
+    </test>
+</suite>
