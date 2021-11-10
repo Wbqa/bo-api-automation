@@ -11,6 +11,7 @@ import org.testng.ISuite;
 import org.testng.Reporter;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.util.Map;
 
 import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
@@ -56,7 +57,7 @@ public class BaseStep extends TestNGTestCase {
                 } else {
                     file = new File(stepsMap.get(stepNo).toString());
                     if (file.exists())
-                        return FileUtils.readFileToString(file, "UTF-8");
+                        return FileUtils.readFileToString(f, Charset.defaultCharset());
 
                     return JsonUtil.toJson(stepsMap.get(stepNo));
                 }

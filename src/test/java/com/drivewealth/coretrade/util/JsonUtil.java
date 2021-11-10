@@ -11,12 +11,20 @@ import com.jayway.jsonpath.spi.json.JacksonJsonNodeJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import org.openqa.selenium.json.Json;
 
+import java.util.Map;
+
 public class JsonUtil {
 
     private static Configuration config = Configuration.builder().jsonProvider(new JacksonJsonNodeJsonProvider())
                                             .mappingProvider(new JacksonMappingProvider()).build();
 
-    public String writeValueToJson(String jsonPayload, String jsonPath, String value) {
+    public String updateValuesToJson(String jsonPayload, String jsonPath, Map<String, String> jsonPathValueMap) {
+        for (String key : jsonPathValueMap.keySet())
+            jsonPayload = updateValueToJson(jsonPayload, jsonPath, jsonPathValueMap.get(key));
+        return jsonPayload;
+    }
+
+    public String updateValueToJson(String jsonPayload, String jsonPath, String value) {
         DocumentContext context = JsonPath.using(config).parse(jsonPayload);
         return context.set(jsonPath,value).jsonString();
     }
