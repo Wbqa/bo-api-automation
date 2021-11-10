@@ -19,37 +19,37 @@ public class JsonUtil {
     private static Configuration config = Configuration.builder().jsonProvider(new JacksonJsonNodeJsonProvider())
                                             .mappingProvider(new JacksonMappingProvider()).build();
 
-    public String deleteElementsFromJson(String jsonPayload, List<String> jsonPathList) {
+    public static String deleteElementsFromJson(String jsonPayload, List<String> jsonPathList) {
         for (String jsonPath : jsonPathList)
             jsonPayload = deleteElementFromJson(jsonPayload, jsonPath);
         return jsonPayload;
     }
 
-    public String deleteElementFromJson(String jsonPayload, String jsonPath) {
+    public static String deleteElementFromJson(String jsonPayload, String jsonPath) {
         DocumentContext context = JsonPath.using(config).parse(jsonPayload);
         context.delete(jsonPath);
         return context.jsonString();
     }
 
-    public String updateValuesToJson(String jsonPayload, Map<String, String> jsonPathValueMap) {
+    public static String updateValuesToJson(String jsonPayload, Map<String, String> jsonPathValueMap) {
         for (String key : jsonPathValueMap.keySet())
             jsonPayload = updateValueToJson(jsonPayload, key, jsonPathValueMap.get(key));
         return jsonPayload;
     }
 
-    public String updateValueToJson(String jsonPayload, String jsonPath, String value) {
+    public static String updateValueToJson(String jsonPayload, String jsonPath, String value) {
         DocumentContext context = JsonPath.using(config).parse(jsonPayload);
         return context.set(jsonPath,value).jsonString();
     }
 
-    public <T> T readElementsFromJson(String jsonPayload, String jsonPath, Predicate... filters) {
+    public static <T> T readElementsFromJson(String jsonPayload, String jsonPath, Predicate... filters) {
         if (filters == null)
             return JsonPath.using(config).parse(jsonPayload).read(jsonPath);
 
         return JsonPath.using(config).parse(jsonPayload).read(jsonPath, filters);
     }
 
-    public <T> T readFromJson(String jsonPayload, String jsonPath, Class<T> clazz, Predicate... filters) {
+    public static <T> T readFromJson(String jsonPayload, String jsonPath, Class<T> clazz, Predicate... filters) {
         return JsonPath.using(config).parse(jsonPayload).read(jsonPath,clazz,filters);
     }
 
