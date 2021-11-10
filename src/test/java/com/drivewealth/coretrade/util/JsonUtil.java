@@ -9,6 +9,7 @@ import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Predicate;
 import com.jayway.jsonpath.spi.json.JacksonJsonNodeJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
+import org.openqa.selenium.json.Json;
 
 public class JsonUtil {
 
@@ -31,22 +32,38 @@ public class JsonUtil {
         return JsonPath.using(config).parse(jsonPayload).read(jsonPath,clazz,filters);
     }
 
-    public static <T> T fromJson(String json,  Class<T> clazz) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(json,clazz);
+    public static <T> T fromJson(String json,  Class<T> clazz) throws RuntimeException {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.readValue(json, clazz);
+        }catch(Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public static <T> String toJson(T object) throws JsonProcessingException {
+    public static boolean isValidJson(String json) {
+        try {
+            new ObjectMapper().readTree(json);
+            return true;
+        }catch(Exception e) {
+            return false;
+        }
+    }
+    public static <T> String toJson(T object) throws RuntimeException {
         return toJson(object,false,true);
     }
 
-    public static <T> String toJson(T object, boolean validate, boolean excludeNullValues) throws JsonProcessingException {
-        if (object == null)
-            return null;
+    public static <T> String toJson(T object, boolean validate, boolean excludeNullValues) throws RuntimeException {
+        try {
+            if (object == null)
+                return null;
 
-        ObjectMapper mapper = new ObjectMapper();
-        if (excludeNullValues)
-            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        return mapper.writeValueAsString(object);
+            ObjectMapper mapper = new ObjectMapper();
+            if (excludeNullValues)
+                mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+            return mapper.writeValueAsString(object);
+        }catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

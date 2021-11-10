@@ -1,16 +1,24 @@
 package com.drivewealth.coretrade.common;
+
+import com.drivewealth.coretrade.util.JsonUtil;
+import com.qmetry.qaf.automation.testng.TestNGTestCase;
 import com.qmetry.qaf.automation.util.JSONUtil;
 import com.qmetry.qaf.automation.util.PropertyUtil;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.impl.LogFactoryImpl;
 import org.testng.ISuite;
 import org.testng.Reporter;
 
+import java.io.File;
 import java.util.Map;
 
 import static com.qmetry.qaf.automation.core.ConfigurationManager.getBundle;
 
-public class BaseStep {
+public class BaseStep extends TestNGTestCase {
+    private final Log logger = LogFactoryImpl.getLog(getClass());
 
-    private PropertyUtil stepContext;
+    private final PropertyUtil stepContext;
 
     public BaseStep() {
         stepContext = getBundle();
@@ -36,7 +44,28 @@ public class BaseStep {
         return stepContext.getProperty(key);
     }
 
-    protected Map<String, Object> getStepData(String stepNo, String stepData) {
-         return JSONUtil.getJsonObjectFromFile(stepData,Map.class);
+    protected String getStepData(String stepNo, String stepData) {
+        try {
+            File file = new File(stepData);
+            if (file.exists()) {
+                Map<String, Object> stepsMap = JSONUtil.getJsonObjectFromFile(stepData, Map.class);
+
+                if (!stepsMap.containsKey(stepNo)) {
+                    logger.error("Step Data Json not found for stepNo " + stepNo);
+                    return null;
+                } else {
+                    file = new File(stepsMap.get(stepNo).toString());
+                    if (file.exists())
+                        return FileUtils.readFileToString(file, "UTF-8");
+
+                    return JsonUtil.toJson(stepsMap.get(stepNo));
+                }
+            } else {
+                return stepData;
+            }
+
+        }catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
