@@ -11,6 +11,7 @@ import com.jayway.jsonpath.spi.json.JacksonJsonNodeJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import org.openqa.selenium.json.Json;
 
+import java.util.List;
 import java.util.Map;
 
 public class JsonUtil {
@@ -18,9 +19,21 @@ public class JsonUtil {
     private static Configuration config = Configuration.builder().jsonProvider(new JacksonJsonNodeJsonProvider())
                                             .mappingProvider(new JacksonMappingProvider()).build();
 
-    public String updateValuesToJson(String jsonPayload, String jsonPath, Map<String, String> jsonPathValueMap) {
+    public String deleteElementsFromJson(String jsonPayload, List<String> jsonPathList) {
+        for (String jsonPath : jsonPathList)
+            jsonPayload = deleteElementFromJson(jsonPayload, jsonPath);
+        return jsonPayload;
+    }
+
+    public String deleteElementFromJson(String jsonPayload, String jsonPath) {
+        DocumentContext context = JsonPath.using(config).parse(jsonPayload);
+        context.delete(jsonPath);
+        return context.jsonString();
+    }
+
+    public String updateValuesToJson(String jsonPayload, Map<String, String> jsonPathValueMap) {
         for (String key : jsonPathValueMap.keySet())
-            jsonPayload = updateValueToJson(jsonPayload, jsonPath, jsonPathValueMap.get(key));
+            jsonPayload = updateValueToJson(jsonPayload, key, jsonPathValueMap.get(key));
         return jsonPayload;
     }
 
