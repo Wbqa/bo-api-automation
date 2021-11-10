@@ -55,10 +55,8 @@ public class BaseStep extends TestNGTestCase {
                     return null;
                 } else {
                     file = new File(stepsMap.get(stepNo).toString());
-                    if (file.exists()) {
-                        Object obj = JSONUtil.getJsonObjectFromFile(file.getAbsolutePath(),Object.class);
-                        return JsonUtil.toJson(obj);
-                    }
+                    if (file.exists())
+                        return FileUtils.readFileToString(file, "UTF-8");
 
                     return JsonUtil.toJson(stepsMap.get(stepNo));
                 }
